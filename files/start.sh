@@ -31,7 +31,8 @@ then
   echo "$key" > /etc/tinc/btkey.txt
 fi
 
-/opt/btsync/btsync --storage /opt/btsync/config -c /etc/tinc/btsync.conf
+/opt/btsync/btsync --storage /opt/btsync/config --config /etc/tinc/btsync.conf
+#/opt/btsync/btsync -c /etc/tinc/btsync.conf
 
 tincd -n $NETNAME -D
 
