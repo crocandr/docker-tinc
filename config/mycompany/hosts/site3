@@ -1,0 +1,5 @@
+# Public IP of this site
+Address = 3.3.3.3 
+#Port=655
+# Subnet on this site
+Subnet = 192.168.3.0/24

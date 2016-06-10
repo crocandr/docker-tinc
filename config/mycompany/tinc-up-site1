@@ -1,0 +1,9 @@
+
+iip link set $INTERFACE up
+# with local LAN address
+ip addr add 192.168.1.254/24 dev $INTERFACE
+
+# routes
+# to other networks
+ip route add 192.168.2.0/24 dev sandras # site2
+ip route add 192.168.3.0/22 dev sandras # site3
