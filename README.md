@@ -23,7 +23,7 @@ docker build -t my/tinc .
 You can start the container from the image.
 
 ```
-docker run -tid --name=tinc --net=host --privileged -v /srv/tinc/config:/etc/tinc my/tinc /opt/start.sh
+docker run -tid --name=tinc --net=host --privileged -e SITENAME=site1 -e NETNAME=mycompany -v /srv/tinc/config:/etc/tinc my/tinc /bin/bash
 ```
 
 You have to use `--net=host` and `--privileged` parameters, because the conatiners needs the tun/tap interface on the docker host.
