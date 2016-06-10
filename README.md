@@ -29,6 +29,7 @@ docker run -tid --name=tinc --net=host --privileged -e SITENAME=site1 -e NETNAME
 You have to use `--net=host` and `--privileged` parameters, because the conatiners needs the tun/tap interface on the docker host.
 
   - `/srv/tinc/config` stores your tinc config on your docker host
+  - you have to define with `-e SYNCKEY=xyz.....` param the bittorrent sync key for host config sync on 2nd,3rd,4th... host
 
 ## Config
 
