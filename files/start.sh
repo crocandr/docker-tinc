@@ -5,7 +5,7 @@ chmod 755 /etc/tinc/*/tinc-up*
 for file in $( find /etc/tinc -iname "*-$SITENAME" )
 do
   symlink="$( echo $file | sed s@-$SITENAME@@g )"
-  ln -s $file $symlink
+  ln -f -s $file $symlink
 done
 
 if [ ! -e /etc/tinc/$NETNAME/rsa_key.priv ]
