@@ -32,9 +32,9 @@ for sitef in /etc/tinc/$NETNAME/hosts/*
 do
   if [ ! $( echo $sitef | grep -i "$SITENAME" | wc -l ) -eq 1 ]
   then
-    connline="$( grep -i "--RSITENAME--" $CONFDIR/$NETNAME/tinc.conf | sed s@\#@@g )"
+    connline="$( grep RSITENAME $CONFDIR/$NETNAME/tinc.conf | sed s@\#@@g )"
     siten=$( basename $sitef )
-    echo $connline sed s@--RSITENAME--@$siten@g >> /tmp/site.txt
+    echo $connline | sed s@--RSITENAME--@$siten@g >> /tmp/site.txt
   fi
 done
 #sed -i '/RSITENAME/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc.conf
@@ -49,10 +49,10 @@ for sitef in /etc/tinc/$NETNAME/hosts/*
 do
   if [ ! $( echo $sitef | grep -i "$SITENAME" | wc -l ) -eq 1 ]
   then
-    routeline="$( grep -i "--RSUBNET--" $CONFDIR/$NETNAME/tinc-up | sed s@\#@@g )"
-    rsubnet="( grep -i subnet $sitef | cut -f2 -d'=' | xargs )"
+    routeline="$( grep -i RSUBNET $CONFDIR/$NETNAME/tinc-up | sed s@\#@@g )"
+    rsubnet="( grep SUBNET $sitef | cut -f2 -d'=' | xargs )"
     rsiten=$( basename $sitef )
-    echo $rline sed s@--RSUBNET--@$rsubnet@g | sed s@--RSITENAME--@$rsiten@g >> /tmp/site.txt
+    echo $rline | sed s@--RSUBNET--@$rsubnet@g | sed s@--RSITENAME--@$rsiten@g >> /tmp/site.txt
   fi
 done
 #sed -i '/RSUBNET/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc-up
