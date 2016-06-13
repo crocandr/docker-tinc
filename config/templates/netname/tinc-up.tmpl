@@ -1,0 +1,8 @@
+
+ip link set $INTERFACE up
+# with local LAN address
+ip addr add --LANIP-- dev $INTERFACE
+
+# routes
+# to other networks
+#ip route add --RSUBNET-- dev $INTERFACE # --RSITENAME--

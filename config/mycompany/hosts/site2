@@ -1,5 +1,0 @@
-# Public IP of this site
-Address = 2.2.2.2 
-#Port=655
-# Subnet on this site
-Subnet = 192.168.2.0/24
