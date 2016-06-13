@@ -14,6 +14,14 @@ then
   echo "" | tincd -n $NETNAME -K4096
 fi
 
+# site conf - pub ip
+PUBIP=$( curl -L http://ifconfig.co )
+if [ ! -z "$PUBIP" ]
+then
+  sed -i "s@Address = .*@Address = $PUBIP@g" /etc/tinc/$NETNAME/hosts/$SITENAME
+fi
+
+
 # btsync for tinc host config sync
 if [ $( grep -i BTSYNCKEY /etc/tinc/btsync.conf | wc -l ) -gt 0 ]
 then
@@ -31,8 +39,15 @@ then
   echo "$key" > /etc/tinc/btkey.txt
 fi
 
-/opt/btsync/btsync --storage /opt/btsync/config --config /etc/tinc/btsync.conf
+#/opt/btsync/btsync --storage /opt/btsync/config --config /etc/tinc/btsync.conf
 #/opt/btsync/btsync -c /etc/tinc/btsync.conf
+#if [ ! -z $CONSULURL ]
+#then
+#  curl -X PUT -d "$PUBIP" $CONSULURL/v1/kv/tinc/$SITENAME/PUBIP
+#  $SITEKEY="$( cat /etc/tinc/$NETNAME/rsa_key.priv )"
+#  curl -X PUT -d "$SITEKEY" $CONSULURL/v1/kv/tinc/$SITENAME/SITEKEY
+#  curl -X PUT -d "$SUBNET" $CONSULURL/v1/kv/tinc/$SITENAME/SUBNET
+#fi
 
 tincd -n $NETNAME -D
 
