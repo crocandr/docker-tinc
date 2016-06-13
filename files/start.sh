@@ -34,7 +34,8 @@ do
   then
     connline="$( grep RSITENAME $CONFDIR/$NETNAME/tinc.conf | sed s@\#@@g )"
     siten=$( basename $sitef )
-    echo $connline | sed s@--RSITENAME--@$siten@g >> /tmp/site.txt
+    echo $connline >> /tmp/site.txt
+    sed -i s@--RSITENAME--@$siten@g /tmp/site.txt
   fi
 done
 #sed -i '/RSITENAME/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc.conf
@@ -52,7 +53,9 @@ do
     routeline="$( grep -i RSUBNET $CONFDIR/$NETNAME/tinc-up | sed s@\#@@g )"
     rsubnet="( grep SUBNET $sitef | cut -f2 -d'=' | xargs )"
     rsiten=$( basename $sitef )
-    echo $rline | sed s@--RSUBNET--@$rsubnet@g | sed s@--RSITENAME--@$rsiten@g >> /tmp/site.txt
+    echo $rline >> /tmp/site.txt
+    sed -i s@--RSUBNET--@$rsubnet@g /tmp/site.txt
+    sed -i s@--RSITENAME--@$rsiten@g /tmp/site.txt
   fi
 done
 #sed -i '/RSUBNET/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc-up
