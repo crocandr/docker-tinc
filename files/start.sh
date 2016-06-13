@@ -39,15 +39,7 @@ then
   echo "$key" > /etc/tinc/btkey.txt
 fi
 
-#/opt/btsync/btsync --storage /opt/btsync/config --config /etc/tinc/btsync.conf
-#/opt/btsync/btsync -c /etc/tinc/btsync.conf
-#if [ ! -z $CONSULURL ]
-#then
-#  curl -X PUT -d "$PUBIP" $CONSULURL/v1/kv/tinc/$SITENAME/PUBIP
-#  $SITEKEY="$( cat /etc/tinc/$NETNAME/rsa_key.priv )"
-#  curl -X PUT -d "$SITEKEY" $CONSULURL/v1/kv/tinc/$SITENAME/SITEKEY
-#  curl -X PUT -d "$SUBNET" $CONSULURL/v1/kv/tinc/$SITENAME/SUBNET
-#fi
+/opt/btsync/btsync --storage /opt/btsync/config --config /etc/tinc/btsync.conf
 
 tincd -n $NETNAME -D
 
