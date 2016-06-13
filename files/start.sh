@@ -34,11 +34,11 @@ do
   then
     connline="$( grep RSITENAME $CONFDIR/$NETNAME/tinc.conf | sed s@\#@@g )"
     siten=$( basename $sitef )
-    echo $connline | s@--RSITENAME--@$siten@g >> /tmp/site.txt
+    echo $connline | sed s@--RSITENAME--@$siten@g >> /tmp/site.txt
   fi
 done
-#sed -i '/RSITENAME/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc.conf
-cat /tmp/site.txt >> $CONFDIR/$NETNAME/tinc.conf
+sed -i '/RSITENAME/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc.conf
+#cat /tmp/site.txt >> $CONFDIR/$NETNAME/tinc.conf
 rm -f /tmp/site.txt
 
 # create tinc-up
@@ -57,7 +57,7 @@ do
 done
 sed -i '/RSUBNET/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc-up
 #cat /tmp/site.txt >> $CONFDIR/$NETNAME/tinc-up
-rm -f /tmp/site.txt
+#rm -f /tmp/site.txt
 chmod 755 $CONFDIR/$NETNAME/tinc-up
 
 
