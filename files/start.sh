@@ -34,8 +34,7 @@ do
   then
     connline="$( grep RSITENAME $CONFDIR/$NETNAME/tinc.conf | sed s@\#@@g )"
     siten=$( basename $sitef )
-    echo $connline >> /tmp/site.txt
-    sed -i s@--RSITENAME--@$siten@g /tmp/site.txt
+    echo $connline | s@--RSITENAME--@$siten@g >> /tmp/site.txt
   fi
 done
 #sed -i '/RSITENAME/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc.conf
@@ -51,15 +50,13 @@ do
   if [ ! $( echo $sitef | grep -i "$SITENAME" | wc -l ) -eq 1 ]
   then
     routeline="$( grep -i RSUBNET $CONFDIR/$NETNAME/tinc-up | sed s@\#@@g )"
-    rsubnet="( grep SUBNET $sitef | cut -f2 -d'=' | xargs )"
+    rsubnet="$( egrep -i 'SUBNET.*=' $sitef | cut -f2 -d'=' | xargs )"
     rsiten=$( basename $sitef )
-    echo $rline >> /tmp/site.txt
-    sed -i s@--RSUBNET--@$rsubnet@g /tmp/site.txt
-    sed -i s@--RSITENAME--@$rsiten@g /tmp/site.txt
+    echo $routeline | sed s@--RSUBNET--@$rsubnet@g | sed s@--RSITENAME--@$rsiten@g >> /tmp/site.txt
   fi
 done
-#sed -i '/RSUBNET/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc-up
-cat /tmp/site.txt >> $CONFDIR/$NETNAME/tinc-up
+sed -i '/RSUBNET/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc-up
+#cat /tmp/site.txt >> $CONFDIR/$NETNAME/tinc-up
 rm -f /tmp/site.txt
 chmod 755 $CONFDIR/$NETNAME/tinc-up
 
