@@ -8,7 +8,7 @@ do
   ln -f -s $file $symlink
 done
 
-if [ ! -e /etc/tinc/$NETNAME/rsa_key.priv ]
+if [ ! -e /etc/tinc/$NETNAME/rsa_key.priv ] || [ ! $( grep -i "rsa public key" /etc/tinc/$NETNAME/hosts/$SITENAME | wc -l ) -ge 1 ]
 then
   # generate key and insert into the host file automatically
   echo "" | tincd -n $NETNAME -K4096
