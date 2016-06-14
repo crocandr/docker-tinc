@@ -40,7 +40,7 @@ docker run -tid --name=tinc --net=host --privileged -e SITENAME=site1 -e NETNAME
 ```
 
 At the start, the Tinc container generates a btsync (Bittorrent Sync) key to syncronize the hosts folder.
-You can view this key with docker logs.
+You can view this key with `docker logs` or with `cat /srv/tinc/config/btkey.txt` command on docker host.
 
 Example: `docker logs tinc`
 
