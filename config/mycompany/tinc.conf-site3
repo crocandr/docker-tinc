@@ -1,7 +1,0 @@
-Name = site3
-ConnectTo = site1
-ConnectTo = site2
-
-UPnP = yes
-
-Device = /dev/net/tun
