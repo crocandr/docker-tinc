@@ -80,6 +80,9 @@ fi
 
 /opt/btsync/btsync --storage /opt/btsync/config --config /etc/tinc/btsync.conf
 
+# force remove pid files
+rm -f /var/run/tinc*pid
+# start tinc
 tincd -n $NETNAME -D
 
 #/bin/bash

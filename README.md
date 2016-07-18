@@ -80,3 +80,18 @@ The `/opt/start.sh` script configure the tinc node on every start.
   - starts the bittorrent sync to sync the hosts config ( public IPs, Subnets, Keys )
   - configures the tinc and connect every node to every other nodes (full MESH, connect everybody to everbody )
 
+
+## Usage
+
+You have to stop and start every container on every site 2 times:
+
+  - 1st time, the start script generates the default config, and the own SSL key
+  - 2nd time, the script reads the config of the other sites and generates the "network up" script
+
+If you have added a new site, you have to restart (stop, wait 1-5 sec, start) every Tinc container on every site to rewrite a config for the new site.
+
+You can check the syncronized and rewrited site config on your docker host's folder, example in the /srv/tinc/config folder.
+
+Good Luck!
+
+
