@@ -4,11 +4,14 @@ CONFDIR="/etc/tinc"
 TMPLDIR="templates/netname"
 
 # site conf - pub ip
-PUBIP=$( curl -L http://ifconfig.co )
 if [ -z "$PUBIP" ]
 then
-  echo "I didnt get the public ip :("
-  exit 1
+  PUBIP=$( curl -L http://ifconfig.co )
+  if [ -z "$PUBIP" ]
+  then
+    echo "I didnt get the public ip :("
+    exit 1
+  fi
 fi
 
 mkdir -p /etc/tinc/$NETNAME/hosts
