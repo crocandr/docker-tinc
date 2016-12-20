@@ -15,7 +15,7 @@ modprobe tun
 ## Build
 
 ```
-docker build -t my/tinc .
+docker build -t croc/tinc .
 ```
 
 ## PREConfig
@@ -41,13 +41,13 @@ The auto-config procedure:
 First start the *1st* container (site1):
 
 ```
-docker run -tid --name=tinc --net=host --privileged -e SITENAME=site1 -e NETNAME=mycompany -e LANIP=192.168.1.254/24 -e SUBNET=192.168.1.0/24 -v /srv/tinc/config:/etc/tinc my/tinc /opt/start.sh
+docker run -tid --name=tinc --net=host --privileged -e SITENAME=site1 -e NETNAME=mycompany -e LANIP=192.168.1.254/24 -e SUBNET=192.168.1.0/24 -v /srv/tinc/config:/etc/tinc croc/tinc /opt/start.sh
 ```
 
 If you don't define a `SYNCKEY` at the start, the Tinc container generates a btsync (Bittorrent Sync) key to syncronize the hosts folder. <br />
 You can view this key with `docker logs tinc` or with `cat /srv/tinc/config/btkey.txt` command on docker host.
 
-Example: `docker logs tinc`
+Example: `docker logs tinc | grep -i "btsync key"`
 
 ```
 PLEASE COPY THIS BTSYNC KEY to the other hosts: ADV4IAC6EJWLYMJUDNTYWDW572L3DG5HN
@@ -58,9 +58,9 @@ You have to define this synckey when you start next containers:
 *2nd*, 3rd... other containers (site2, site3 ....):
 
 ```
-docker run -tid --name=tinc --net=host --privileged -e SITENAME=site2 -e LANIP=192.168.2.254/24 -e SUBNET=192.168.2.0/24 -e SYNCKEY=ADV4IAC6EJWLYMJUDNTYWDW572L3DG5HN -e NETNAME=mycompany -v /srv/tinc/config:/etc/tinc my/tinc /opt/start.sh
+docker run -tid --name=tinc --net=host --privileged -e SITENAME=site2 -e LANIP=192.168.2.254/24 -e SUBNET=192.168.2.0/24 -e SYNCKEY=ADV4IAC6EJWLYMJUDNTYWDW572L3DG5HN -e NETNAME=mycompany -v /srv/tinc/config:/etc/tinc croc/tinc /opt/start.sh
 
-docker run -tid --name=tinc --net=host --privileged -e SITENAME=site3 -e SYNCKEY=ADV4IAC6EJWLYMJUDNTYWDW572L3DG5HN -e NETNAME=mycompany -e LANIP=192.168.3.254/24 -e SUBNET=192.168.3.0/24 -e PUBIP=8.9.1.1 -v /srv/tinc/config:/etc/tinc my/tinc /opt/start.sh
+docker run -tid --name=tinc --net=host --privileged -e SITENAME=site3 -e SYNCKEY=ADV4IAC6EJWLYMJUDNTYWDW572L3DG5HN -e NETNAME=mycompany -e LANIP=192.168.3.254/24 -e SUBNET=192.168.3.0/24 -e PUBIP=8.9.1.1 -v /srv/tinc/config:/etc/tinc croc/tinc /opt/start.sh
 
 ...
 ```
