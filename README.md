@@ -73,6 +73,16 @@ You have to use `--net=host` and `--privileged` parameters, because the conatine
   - the `-e SUBNET=...` defines your LAN network. You can use wider network address like `192.168.0.0/22` or `172.17.0.0/19` or something similar... This is your choice.
   - if you have multiple WAN connection or something other reason, you can override the automatic public ip finder mehanicsm with `-e PUBIP=8.9.1.1` parameter for your public IP
 
+
+
+Don't forget! / Last step (check the 'Usage' chapter for more infos):
+
+You have to restart every the tinc container on every host if the network doesn't work at the first time.
+
+```
+docker restart tinc
+```
+
 ## Config
 
 The `/opt/start.sh` script configure the tinc node on every start.
@@ -89,9 +99,11 @@ You have to stop and start every container on every site 2 times:
   - 1st time, the start script generates the default config, and the own SSL key
   - 2nd time, the script reads the config of the other sites and generates the "network up" script
 
-If you have added a new site, you have to restart (stop, wait 1-5 sec, start) every Tinc container on every site to rewrite a config for the new site.
+If you've added a new site, you have to restart (stop, wait 1-5 sec, start) every Tinc container on every site to rewrite a config for the new site.
 
 You can check the syncronized and rewrited site config on your docker host's folder, example in the /srv/tinc/config folder.
+
+
 
 Good Luck!
 
