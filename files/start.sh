@@ -71,7 +71,7 @@ then
   then
     key="$SYNCKEY"
   else
-    key="$( /opt/btsync/btsync --generate-secret )"
+    key="$( /opt/btsync/rslsync --generate-secret )"
   fi
   # change btsync conf
   sed -i s@--BTSYNCKEY--@$key@g /etc/tinc/btsync.conf
@@ -81,7 +81,7 @@ then
   echo "$key" > /etc/tinc/btkey.txt
 fi
 
-/opt/btsync/btsync --storage /opt/btsync/config --config /etc/tinc/btsync.conf
+/opt/btsync/rslsync --storage /opt/btsync/config --config /etc/tinc/btsync.conf
 
 # force remove pid files
 rm -f /var/run/tinc*pid
