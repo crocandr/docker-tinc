@@ -3,6 +3,8 @@
 CONFDIR="/etc/tinc"
 TMPLDIR="/etc/tinc-templates"
 
+echo "STARTED: "$( date )
+
 # site conf - pub ip
 if [ -z "$PUBIP" ]
 then
@@ -20,12 +22,6 @@ mkdir -p /etc/tinc/$NETNAME/hosts
 cp -f $TMPLDIR/templates/hosts/site.tmpl $CONFDIR/$NETNAME/hosts/$SITENAME
 sed -i s@--PUBIP--@$PUBIP@g $CONFDIR/$NETNAME/hosts/$SITENAME
 sed -i s@--SUBNET--@$SUBNET@g $CONFDIR/$NETNAME/hosts/$SITENAME
-# gen cert and insert into site config
-if [ ! -e /etc/tinc/$NETNAME/rsa_key.priv ] # || [ ! $( grep -i "rsa public key" /etc/tinc/$NETNAME/hosts/$SITENAME | wc -l ) -ge 1 ]
-then
-  # generate key and insert into the host file automatically
-  echo "" | tincd -n $NETNAME -K4096
-fi
 
 # create tinc.conf
 cp -f $TMPLDIR/templates/tinc.conf.tmpl $CONFDIR/$NETNAME/tinc.conf
@@ -62,6 +58,14 @@ sed -i '/RSUBNET/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc-up
 #cat /tmp/site.txt >> $CONFDIR/$NETNAME/tinc-up
 #rm -f /tmp/site.txt
 chmod 755 $CONFDIR/$NETNAME/tinc-up
+
+# gen cert and insert into site config
+if [ ! -e /etc/tinc/$NETNAME/rsa_key.priv ] # || [ ! $( grep -i "rsa public key" /etc/tinc/$NETNAME/hosts/$SITENAME | wc -l ) -ge 1 ]
+then
+  # generate key and insert into the host file automatically
+  echo "" | tincd -n $NETNAME -K4096
+fi
+
 
 
 # btsync for tinc host config sync
