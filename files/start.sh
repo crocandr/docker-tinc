@@ -1,7 +1,9 @@
 #!/bin/bash
 
 CONFDIR="/etc/tinc"
-TMPLDIR="templates/netname"
+TMPLDIR="/etc/tinc-templates"
+
+echo "STARTED: "$( date )
 
 # site conf - pub ip
 if [ -z "$PUBIP" ]
@@ -17,18 +19,12 @@ fi
 mkdir -p /etc/tinc/$NETNAME/hosts
 
 # create site config
-cp -f $CONFDIR/$TMPLDIR/hosts/site.tmpl $CONFDIR/$NETNAME/hosts/$SITENAME
+cp -f $TMPLDIR/templates/hosts/site.tmpl $CONFDIR/$NETNAME/hosts/$SITENAME
 sed -i s@--PUBIP--@$PUBIP@g $CONFDIR/$NETNAME/hosts/$SITENAME
 sed -i s@--SUBNET--@$SUBNET@g $CONFDIR/$NETNAME/hosts/$SITENAME
-# gen cert and insert into site config
-if [ ! -e /etc/tinc/$NETNAME/rsa_key.priv ] || [ ! $( grep -i "rsa public key" /etc/tinc/$NETNAME/hosts/$SITENAME | wc -l ) -ge 1 ]
-then
-  # generate key and insert into the host file automatically
-  echo "" | tincd -n $NETNAME -K4096
-fi
 
 # create tinc.conf
-cp -f $CONFDIR/$TMPLDIR/tinc.conf.tmpl $CONFDIR/$NETNAME/tinc.conf
+cp -f $TMPLDIR/templates/tinc.conf.tmpl $CONFDIR/$NETNAME/tinc.conf
 sed -i s@--SITENAME--@$SITENAME@g $CONFDIR/$NETNAME/tinc.conf
 echo "" > /tmp/site.txt
 for sitef in /etc/tinc/$NETNAME/hosts/*
@@ -45,7 +41,7 @@ sed -i '/RSITENAME/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc.conf
 rm -f /tmp/site.txt
 
 # create tinc-up
-cp -f $CONFDIR/$TMPLDIR/tinc-up.tmpl $CONFDIR/$NETNAME/tinc-up
+cp -f $TMPLDIR/templates/tinc-up.tmpl $CONFDIR/$NETNAME/tinc-up
 sed -i s@--LANIP--@$LANIP@g $CONFDIR/$NETNAME/tinc-up
 echo "" > /tmp/site.txt
 for sitef in /etc/tinc/$NETNAME/hosts/*
@@ -63,25 +59,38 @@ sed -i '/RSUBNET/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc-up
 #rm -f /tmp/site.txt
 chmod 755 $CONFDIR/$NETNAME/tinc-up
 
+# gen cert and insert into site config
+if [ ! -e /etc/tinc/$NETNAME/rsa_key.priv ] || [ ! $( grep -i "rsa public key" /etc/tinc/$NETNAME/hosts/$SITENAME | wc -l ) -ge 1 ]
+then
+  # generate key and insert into the host file automatically
+  echo "" | tincd -n $NETNAME -K4096
+fi
+
+
 
 # btsync for tinc host config sync
-if [ $( grep -i BTSYNCKEY /etc/tinc/btsync.conf | wc -l ) -gt 0 ]
+SYNC_CONF="/etc/tinc/resilio.conf"
+if [ ! -e $SYNC_CONF ]
+then 
+  cp -f $TMPLDIR/resilio.conf.tmpl $SYNC_CONF 
+fi
+if [ $( grep -i BTSYNCKEY $SYNC_CONF | wc -l ) -gt 0 ]
 then
   if [ ! -z $SYNCKEY ]
   then
     key="$SYNCKEY"
   else
-    key="$( /opt/btsync/rslsync --generate-secret )"
+    key="$( /opt/resilio/rslsync --generate-secret )"
   fi
   # change btsync conf
-  sed -i s@--BTSYNCKEY--@$key@g /etc/tinc/btsync.conf
-  sed -i s@--SITENAME--@$SITENAME@g /etc/tinc/btsync.conf
-  sed -i s@--NETNAME--@$NETNAME@g /etc/tinc/btsync.conf
-  echo -e "\n\nPLEASE COPY THIS BTSYNC KEY to the other hosts: $key \n\n"
-  echo "$key" > /etc/tinc/btkey.txt
+  sed -i s@--BTSYNCKEY--@$key@g $SYNC_CONF
+  sed -i s@--SITENAME--@$SITENAME@g $SYNC_CONF
+  sed -i s@--NETNAME--@$NETNAME@g $SYNC_CONF
+  echo -e "\n\nPLEASE COPY THIS SYNC KEY to the other hosts: $key \n\n"
+  echo "$key" > /etc/tinc/synckey.txt
 fi
 
-/opt/btsync/rslsync --storage /opt/btsync/config --config /etc/tinc/btsync.conf
+/opt/resilio/rslsync --storage /opt/resilio/config --config $SYNC_CONF 
 
 # force remove pid files
 rm -f /var/run/tinc*pid
@@ -89,3 +98,4 @@ rm -f /var/run/tinc*pid
 tincd -n $NETNAME -D
 
 #/bin/bash
+
