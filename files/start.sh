@@ -60,7 +60,7 @@ sed -i '/RSUBNET/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc-up
 chmod 755 $CONFDIR/$NETNAME/tinc-up
 
 # gen cert and insert into site config
-if [ ! -e /etc/tinc/$NETNAME/rsa_key.priv ] # || [ ! $( grep -i "rsa public key" /etc/tinc/$NETNAME/hosts/$SITENAME | wc -l ) -ge 1 ]
+if [ ! -e /etc/tinc/$NETNAME/rsa_key.priv ] || [ ! $( grep -i "rsa public key" /etc/tinc/$NETNAME/hosts/$SITENAME | wc -l ) -ge 1 ]
 then
   # generate key and insert into the host file automatically
   echo "" | tincd -n $NETNAME -K4096
