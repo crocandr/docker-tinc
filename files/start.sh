@@ -86,7 +86,7 @@ then
   sed -i s@--BTSYNCKEY--@$key@g $SYNC_CONF
   sed -i s@--SITENAME--@$SITENAME@g $SYNC_CONF
   sed -i s@--NETNAME--@$NETNAME@g $SYNC_CONF
-  echo -e "\n\nPLEASE COPY THIS BTSYNC KEY to the other hosts: $key \n\n"
+  echo -e "\n\nPLEASE COPY THIS SYNC KEY to the other hosts: $key \n\n"
   echo "$key" > /etc/tinc/synckey.txt
 fi
 

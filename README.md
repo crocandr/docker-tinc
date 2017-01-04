@@ -18,16 +18,6 @@ modprobe tun
 docker build -t croc/tinc .
 ```
 
-## PREConfig
-
-You have to preconfig the tinc container with some template config files and others. Please copy these config files into a folder on the docker host.
-
-```
-mkdir /srv/tinc && cp -rf config /srv/tinc/config
-```
-
-Ok, now you can run the tinc vpn containers.
-
 ## Run
 
 The auto-config procedure:
@@ -45,12 +35,12 @@ docker run -tid --name=tinc --net=host --privileged -e SITENAME=site1 -e NETNAME
 ```
 
 If you don't define a `SYNCKEY` at the start, the Tinc container generates a btsync (Bittorrent Sync) key to syncronize the hosts folder. <br />
-You can view this key with `docker logs tinc` or with `cat /srv/tinc/config/btkey.txt` command on docker host.
+You can view this key with `docker logs tinc` or with `cat /srv/tinc/config/synckey.txt` command on docker host.
 
-Example: `docker logs tinc | grep -i "btsync key"`
+Example: `docker logs tinc | grep -i "sync key"`
 
 ```
-PLEASE COPY THIS BTSYNC KEY to the other hosts: ADV4IAC6EJWLYMJUDNTYWDW572L3DG5HN
+PLEASE COPY THIS SYNC KEY to the other hosts: ADV4IAC6EJWLYMJUDNTYWDW572L3DG5HN
 ``` 
 
 You have to define this synckey when you start next containers: 
@@ -75,7 +65,7 @@ You have to use `--net=host` and `--privileged` parameters, because the conatine
 
 
 
-Don't forget! / Last step (check the 'Usage' chapter for more infos):
+Don't forget the latest step! (check the 'Usage' chapter for more infos):
 
 You have to restart every the tinc container on every host if the network doesn't work at the first time.
 
@@ -96,10 +86,10 @@ The `/opt/start.sh` script configure the tinc node on every start.
 
 You have to stop and start every container on every site 2 times:
 
-  - 1st time, the start script generates the default config, and the own SSL key
+  - 1st time, the start script generates the default config, and the host's SSL key
   - 2nd time, the script reads the config of the other sites and generates the "network up" script
 
-If you've added a new site, you have to restart (stop, wait 1-5 sec, start) every Tinc container on every site to rewrite a config for the new site.
+If you've added a new site, you have to restart (stop, wait some seconds, start) every Tinc container on every site to rewrite a config for the new site.
 
 You can check the syncronized and rewrited site config on your docker host's folder, example in the /srv/tinc/config folder.
 
