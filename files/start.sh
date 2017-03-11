@@ -3,6 +3,8 @@
 CONFDIR="/etc/tinc"
 TMPLDIR="/etc/tinc-templates"
 
+NETNAME="site2site"
+
 echo "STARTED: "$( date )
 
 # site conf - pub ip

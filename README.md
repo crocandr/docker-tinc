@@ -31,15 +31,15 @@ The auto-config procedure:
 First start the *1st* container (site1):
 
 ```
-NETNAME=mycompany && docker run -tid --name=tinc --net=host --privileged -e SITENAME=site1 -e NETNAME=$NETNAME -e LANIP=192.168.1.254/24 -e SUBNET=192.168.1.0/24 -v /srv/tinc/config:/etc/tinc/$NETNAME/hosts croc/tinc /opt/start.sh
+docker run -tid --name=tinc --net=host --privileged -e SITENAME=site1 -e LANIP=192.168.1.254/24 -e SUBNET=192.168.1.0/24 -v /srv/tinc/config:/etc/tinc/site2site/hosts croc/tinc /opt/start.sh
 ```
 
 *2nd*, 3rd... other containers (site2, site3 ....):
 
 ```
-NETNAME=mycompany && docker run -tid --name=tinc --net=host --privileged -e SITENAME=site2 -e LANIP=192.168.2.254/24 -e SUBNET=192.168.2.0/24 -e NETNAME=$NETNAME -v /srv/tinc/config:/etc/tinc/$NETNAME/hosts croc/tinc /opt/start.sh
+docker run -tid --name=tinc --net=host --privileged -e SITENAME=site2 -e LANIP=192.168.2.254/24 -e SUBNET=192.168.2.0/24 -v /srv/tinc/config:/etc/tinc/site2site/hosts croc/tinc /opt/start.sh
 
-NETNAME=mycompany && docker run -tid --name=tinc --net=host --privileged -e SITENAME=site3 -e NETNAME=$NETNAME -e LANIP=192.168.3.254/24 -e SUBNET=192.168.3.0/24 -e PUBIP=8.9.1.1 -v /srv/tinc/config:/etc/tinc/$NETNAME/hosts croc/tinc /opt/start.sh
+docker run -tid --name=tinc --net=host --privileged -e SITENAME=site3 -e LANIP=192.168.3.254/24 -e SUBNET=192.168.3.0/24 -e PUBIP=8.9.1.1 -v /srv/tinc/config:/etc/tinc/site2site/hosts croc/tinc /opt/start.sh
 ...
 ```
 
