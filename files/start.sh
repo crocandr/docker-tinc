@@ -3,6 +3,8 @@
 CONFDIR="/etc/tinc"
 TMPLDIR="/etc/tinc-templates"
 
+NETNAME="site2site"
+
 echo "STARTED: "$( date )
 
 # site conf - pub ip
@@ -66,31 +68,6 @@ then
   echo "" | tincd -n $NETNAME -K4096
 fi
 
-
-
-# btsync for tinc host config sync
-SYNC_CONF="/etc/tinc/resilio.conf"
-if [ ! -e $SYNC_CONF ]
-then 
-  cp -f $TMPLDIR/resilio.conf.tmpl $SYNC_CONF 
-fi
-if [ $( grep -i BTSYNCKEY $SYNC_CONF | wc -l ) -gt 0 ]
-then
-  if [ ! -z $SYNCKEY ]
-  then
-    key="$SYNCKEY"
-  else
-    key="$( /opt/resilio/rslsync --generate-secret )"
-  fi
-  # change btsync conf
-  sed -i s@--BTSYNCKEY--@$key@g $SYNC_CONF
-  sed -i s@--SITENAME--@$SITENAME@g $SYNC_CONF
-  sed -i s@--NETNAME--@$NETNAME@g $SYNC_CONF
-  echo -e "\n\nPLEASE COPY THIS SYNC KEY to the other hosts: $key \n\n"
-  echo "$key" > /etc/tinc/synckey.txt
-fi
-
-/opt/resilio/rslsync --storage /opt/resilio/config --config $SYNC_CONF 
 
 # force remove pid files
 rm -f /var/run/tinc*pid
