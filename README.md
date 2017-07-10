@@ -107,6 +107,11 @@ You can check the syncronized and rewrited site config on your docker host's fol
 DO NOT FORGET: Sync the config of the hosts/sites from the docker host's `/srv/tinc/config` folder.
 
 
+## Good to know
+
+  - `EXTRA_PARAMS` - You can use this parameter if you would like to run tinc in debug mode (example: `-d 3` ) or something similar.
+  Check the man page of tinc, and use that parameters.
+
 
 Good Luck!
 
