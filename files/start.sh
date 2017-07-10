@@ -13,7 +13,7 @@ then
   PUBIP=$( curl -L http://ifconfig.co )
   if [ -z "$PUBIP" ]
   then
-    echo "I didnt get the public ip :("
+    echo "I did not get the public ip :("
     exit 1
   fi
 fi
@@ -72,7 +72,7 @@ fi
 # force remove pid files
 rm -f /var/run/tinc*pid
 # start tinc
-tincd -n $NETNAME -D
+tincd -n $NETNAME -D $EXTRA_PARAMS
 
 #/bin/bash
 
