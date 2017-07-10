@@ -7,6 +7,7 @@ services:
       SITENAME: "test-site"
       LANIP: "192.168.230.253/24"
       SUBNET: "192.168.230.0/19"
+    volumes:
       - './tinc/config:/etc/tinc/site2site/hosts'
       - '/etc/localtime:/etc/localtime:ro'
     privileged: true
