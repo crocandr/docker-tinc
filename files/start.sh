@@ -28,37 +28,29 @@ sed -i s@--SUBNET--@$SUBNET@g $CONFDIR/$NETNAME/hosts/$SITENAME
 # create tinc.conf
 cp -f $TMPLDIR/templates/tinc.conf.tmpl $CONFDIR/$NETNAME/tinc.conf
 sed -i s@--SITENAME--@$SITENAME@g $CONFDIR/$NETNAME/tinc.conf
-echo "" > /tmp/site.txt
 for sitef in /etc/tinc/$NETNAME/hosts/*
 do
-  if [ $sitef != $SITENAME ]
+  if [ ! "$( basename $sitef )" == "$SITENAME" ]
   then
     connline="$( grep RSITENAME $CONFDIR/$NETNAME/tinc.conf | sed s@^\#@@g )"
-    siten=$( basename $sitef )
-    echo $connline | sed s@--RSITENAME--@$siten@g >> /tmp/site.txt
+    sitename=$( basename $sitef )
+    echo $connline | sed s@--RSITENAME--@$sitename@g >> $CONFDIR/$NETNAME/tinc.conf
   fi
 done
-sed -i '/RSITENAME/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc.conf
-#cat /tmp/site.txt >> $CONFDIR/$NETNAME/tinc.conf
-rm -f /tmp/site.txt
 
 # create tinc-up
 cp -f $TMPLDIR/templates/tinc-up.tmpl $CONFDIR/$NETNAME/tinc-up
 sed -i s@--LANIP--@$LANIP@g $CONFDIR/$NETNAME/tinc-up
-echo "" > /tmp/site.txt
 for sitef in /etc/tinc/$NETNAME/hosts/*
 do
-  if [ $sitef != $SITENAME ]
+  if [ ! "$( basename $sitef )" == "$SITENAME" ]
   then
     routeline="$( grep -i RSUBNET $CONFDIR/$NETNAME/tinc-up | sed s@^\#@@g )"
     rsubnet="$( egrep -i 'SUBNET.*=' $sitef | cut -f2 -d'=' | xargs )"
-    rsiten=$( basename $sitef )
-    echo $routeline | sed s@--RSUBNET--@$rsubnet@g | sed s@--RSITENAME--@$rsiten@g >> /tmp/site.txt
+    rsitename=$( basename $sitef )
+    echo $routeline | sed s@--RSUBNET--@$rsubnet@g | sed s@--RSITENAME--@$rsitename@g >> $CONFDIR/$NETNAME/tinc-up 
   fi
 done
-sed -i '/RSUBNET/r /tmp/site.txt' $CONFDIR/$NETNAME/tinc-up
-#cat /tmp/site.txt >> $CONFDIR/$NETNAME/tinc-up
-#rm -f /tmp/site.txt
 chmod 755 $CONFDIR/$NETNAME/tinc-up
 
 # gen cert and insert into site config
