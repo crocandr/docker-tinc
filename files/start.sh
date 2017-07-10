@@ -31,7 +31,7 @@ sed -i s@--SITENAME--@$SITENAME@g $CONFDIR/$NETNAME/tinc.conf
 echo "" > /tmp/site.txt
 for sitef in /etc/tinc/$NETNAME/hosts/*
 do
-  if [ ! $( echo $sitef | grep -i "$SITENAME" | wc -l ) -eq 1 ]
+  if [ $sitef != $SITENAME ]
   then
     connline="$( grep RSITENAME $CONFDIR/$NETNAME/tinc.conf | sed s@^\#@@g )"
     siten=$( basename $sitef )
@@ -48,7 +48,7 @@ sed -i s@--LANIP--@$LANIP@g $CONFDIR/$NETNAME/tinc-up
 echo "" > /tmp/site.txt
 for sitef in /etc/tinc/$NETNAME/hosts/*
 do
-  if [ ! $( echo $sitef | grep -i "$SITENAME" | wc -l ) -eq 1 ]
+  if [ $sitef != $SITENAME ]
   then
     routeline="$( grep -i RSUBNET $CONFDIR/$NETNAME/tinc-up | sed s@^\#@@g )"
     rsubnet="$( egrep -i 'SUBNET.*=' $sitef | cut -f2 -d'=' | xargs )"
