@@ -23,9 +23,8 @@ docker build -t croc/tinc .
 The auto-config procedure:
 
   - start the tinc container on all site
-  - syncronise the hosts file to all other sites (example: with croc/simplesync container)
-  - stop the tinc container on all site
-  - start the tinc container on all site
+  - syncronise the hosts file to all other sites (recommended way with `syncthing/syncthing` or `resilio/sync` container)
+  - restart the tinc container on all site
 
 
 First start the *1st* container (site1):
@@ -60,11 +59,37 @@ You have to restart every the tinc container on every host if the network doesn'
 docker restart tinc
 ```
 
+### Docker-Compose
+
+You can use `docker-compose` for start the stack (tinc and sync solution), but do not forget the site specified config!
+Change your docker-compose.yml on every site, for site-local config.
+
+Example:
+
+`docker-compose.yml`:
+```
+...
+      SITENAME: "test-site"
+      LANIP: "192.168.230.253/24"
+      SUBNET: "192.168.230.0/19"
+...
+```
+
+Start the stack (with sync):
+```
+docker-compose up -d
+```
+
+... and ...
+  - configure the sync (resilio or syncthing or other)
+  - wait for the config sync
+  - restart the tinc or the full stack with `docker-compose restart`
+
 ## Config
 
 The `/opt/start.sh` script configure the tinc node on every start.
 
-  - find the public ip
+  - finds the public ip
   - configures the tinc and connect every node to every other nodes (full MESH, connect everybody to everbody )
 
 
@@ -80,7 +105,12 @@ If you've added a new site, you have to restart (stop, wait some seconds, start)
 You can check the syncronized and rewrited site config on your docker host's folder, example in the `/srv/tinc/config` folder.
 
 DO NOT FORGET: Sync the config of the hosts/sites from the docker host's `/srv/tinc/config` folder.
-You can do with croc/simplesync container or your favourite file sync solution.
+
+
+## Good to know
+
+  - `EXTRA_PARAMS` - You can use this parameter if you would like to run tinc in debug mode (example: `-d 3` ) or something similar.
+  Check the man page of tinc, and use that parameters.
 
 
 Good Luck!

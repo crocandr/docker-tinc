@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  tinc:
+    image: croc/tinc
+    environment:
+      SITENAME: "test-site"
+      LANIP: "192.168.230.253/24"
+      SUBNET: "192.168.230.0/19"
+    volumes:
+      - './tinc/config:/etc/tinc/site2site/hosts'
+      - '/etc/localtime:/etc/localtime:ro'
+    privileged: true
+    network_mode: "host"
+    stdin_open: true
+    tty: true
+    command: /opt/start.sh
+    restart: always
+  sync:
+    image: resilio/sync
+    depends_on:
+      - tinc
+    volumes:
+#      - './sync/config:/config'
+#      - './sync/default_folder:/var/syncthing/Sync'
+#      - './tinc/config:/var/syncthing/tinc'
+       - './tinc/config:/mnt/sync/folders/config'
+       - '/etc/localtime:/etc/localtime:ro'
+    ports:
+       - '8888:8888'
+       - '55555:55555'
+    restart: always
