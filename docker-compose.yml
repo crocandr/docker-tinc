@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  tinc:
+    image: croc/tinc
+    environment:
+      SITENAME: "test-site"
+      LANIP: "192.168.230.253/24"
+      SUBNET: "192.168.230.0/19"
+      - './tinc/config:/etc/tinc/site2site/hosts'
+      - '/etc/localtime:/etc/localtime:ro'
+    privileged: true
+    network_mode: "host"
+    stdin_open: true
+    tty: true
+    command: /opt/start.sh
+    restart: always
+  sync:
+    image: syncthing/syncthing
+    depends_on:
+      - tinc
+    volumes:
+      - './sync/config:/var/syncthing/config'
+#      - './sync/default_folder:/var/syncthing/Sync'
+#      - './tinc/config:/var/syncthing/tinc'
+      - './tinc/config:/var/syncthing/Sync'
+      - '/etc/localtime:/etc/localtime:ro'
+    ports:
+      - '22000:22000'
+      - '8384:8384'
+    restart: always
