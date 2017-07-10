@@ -23,7 +23,7 @@ docker build -t croc/tinc .
 The auto-config procedure:
 
   - start the tinc container on all site
-  - syncronise the hosts file to all other sites (example: with croc/simplesync container)
+  - syncronise the hosts file to all other sites (with `syncthing/syncthing` or `resilio/sync` container)
   - stop the tinc container on all site
   - start the tinc container on all site
 
@@ -60,11 +60,37 @@ You have to restart every the tinc container on every host if the network doesn'
 docker restart tinc
 ```
 
+### Docker-Compose
+
+You can use `docker-compose` for start, but do not forget the site specified config!
+Change your docker-compose.yml on every site, for site-local config.
+
+Example:
+
+`docker-compose.yml`:
+```
+...
+      SITENAME: "test-site"
+      LANIP: "192.168.230.253/24"
+      SUBNET: "192.168.230.0/19"
+...
+```
+
+Start the stack (with sync):
+```
+docker-compose up -d
+```
+
+... and ...
+  - configure the sync (resilo or syncthing or other)
+  - wait for the config sync
+  - restart the tinc or the full stack with `docker-compose restart`
+
 ## Config
 
 The `/opt/start.sh` script configure the tinc node on every start.
 
-  - find the public ip
+  - finds the public ip
   - configures the tinc and connect every node to every other nodes (full MESH, connect everybody to everbody )
 
 
@@ -81,6 +107,16 @@ You can check the syncronized and rewrited site config on your docker host's fol
 
 DO NOT FORGET: Sync the config of the hosts/sites from the docker host's `/srv/tinc/config` folder.
 You can do with croc/simplesync container or your favourite file sync solution.
+
+
+## Know Bugs
+
+  1. Site name with numbers
+  Please do not use site name with numbers (example: site1, site2, etc...).
+  Use name of the site (example: `EUsiteA` , `EastCoast`, etc...) instead of numbers.
+  I haven't know what occurs the problem yet, but the route rules doesn't work when You use numbers in the site name. Sorry.
+
+
 
 
 Good Luck!
