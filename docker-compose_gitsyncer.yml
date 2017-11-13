@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  tinc:
+    image: croc/tinc
+    environment:
+      SITENAME: "siteA"
+      LANIP: "192.168.0.253/24"
+      SUBNET: "192.168.0.0/19"
+    volumes:
+      - './tinc/config:/etc/tinc/site2site/hosts'
+      - '/etc/localtime:/etc/localtime:ro'
+    privileged: true
+    network_mode: "host"
+    stdin_open: true
+    tty: true
+    command: /opt/start.sh
+    restart: always
+  sync:
+    image: croc/git-syncer 
+    depends_on:
+      - tinc
+    environment:
+      URL: "https://bitbucket.org/USER/tinc-repo.git"
+      BRANCH: "master"
+      GIT_USER: "USER"
+      GIT_PASSWORD: "SECRETPASSWORD"
+    volumes:
+      - './sync/ssh:/root/.ssh'
+      - './tinc/config:/data'
+      - '/etc/localtime:/etc/localtime:ro'
+#    restart: always
