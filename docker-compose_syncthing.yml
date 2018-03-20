@@ -4,10 +4,11 @@ services:
   tinc:
     image: croc/tinc
     environment:
-      SITENAME: "siteA"
-      PORT: "655"
-      LANIP: "192.168.0.253/24"
-      SUBNET: "192.168.0.0/19"
+      - SITENAME=siteA
+      - PORT=655
+#      - PUBADDR=mycompany-siteA.duckdns.org
+      - LANIP=192.168.0.253/24
+      - SUBNET=192.168.0.0/19
     volumes:
       - './tinc/config:/etc/tinc/site2site/hosts'
       - '/etc/localtime:/etc/localtime:ro'

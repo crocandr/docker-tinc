@@ -38,7 +38,7 @@ docker run -tid --name=tinc --net=host --privileged -e SITENAME=site1 -e LANIP=1
 ```
 docker run -tid --name=tinc --net=host --privileged -e SITENAME=site2 -e LANIP=192.168.2.254/24 -e SUBNET=192.168.2.0/24 -v /srv/tinc/config:/etc/tinc/site2site/hosts croc/tinc /opt/start.sh
 
-docker run -tid --name=tinc --net=host --privileged -e SITENAME=site3 -e LANIP=192.168.3.254/24 -e SUBNET=192.168.3.0/24 -e PUBIP=8.9.1.1 -v /srv/tinc/config:/etc/tinc/site2site/hosts croc/tinc /opt/start.sh
+docker run -tid --name=tinc --net=host --privileged -e SITENAME=site3 -e LANIP=192.168.3.254/24 -e SUBNET=192.168.3.0/24 -e PUBADDR=8.9.1.1 -v /srv/tinc/config:/etc/tinc/site2site/hosts croc/tinc /opt/start.sh
 ...
 ```
 
@@ -47,7 +47,7 @@ You have to use `--net=host` and `--privileged` parameters, because the containe
   - `/srv/tinc/config` stores your tinc config on your docker host
   - the `-e LANIP=...` defines the container's IP on your LAN network
   - the `-e SUBNET=...` defines your LAN network. You can use wider network address like `192.168.0.0/22` or `172.17.0.0/19` or something similar... This is your choice.
-  - if you have multiple WAN connection or something other reason, you can override the automatic public IP finder mechanism with `-e PUBIP=8.9.1.1` parameter for your public IP
+  - if you have multiple WAN connection or something other reason, you can override the automatic public IP finder mechanism with `-e PUBADDR=8.9.1.1` parameter for your public IP
 
 
 
