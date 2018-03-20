@@ -4,17 +4,16 @@ services:
   tinc:
     image: croc/tinc
     environment:
-      SITENAME: "siteA"
-      LANIP: "192.168.0.253/24"
-      SUBNET: "192.168.0.0/19"
+      - SITENAME=siteA
+      - PORT=655
+#      - PUBADDR=mycompany-siteA.duckdns.org
+      - LANIP=192.168.0.253/24
+      - SUBNET=192.168.0.0/19
     volumes:
       - './tinc/config:/etc/tinc/site2site/hosts'
       - '/etc/localtime:/etc/localtime:ro'
     privileged: true
     network_mode: "host"
-    stdin_open: true
-    tty: true
-    command: /opt/start.sh
     restart: always
   sync:
     image: resilio/sync

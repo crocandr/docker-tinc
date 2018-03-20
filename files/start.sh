@@ -7,15 +7,17 @@ NETNAME="site2site"
 
 echo "STARTED: "$( date )
 
+[ -z $PORT ] && PORT=655
+
 # site conf - pub ip
-if [ -z "$PUBIP" ]
+if [ -z "$PUBADDR" ]
 then
-  PUBIP=$( curl -L -k http://ifconfig.co || exit 1 )
-  # failsafe PUBIP
-  [ $PUBIP ] || PUBIP=$( curl -L -k http://icanhazip.com || exit 1 )
-  [ $PUBIP ] || PUBIP=$( curl -L -k http://ident.me || exit 1 )
-  [ $PUBIP ] || PUBIP=$( curl -L -k http://eth0.me || exit 1 )
-  if [ -z "$PUBIP" ]
+  PUBADDR=$( curl -L -k http://ifconfig.co || exit 1 )
+  # failsafe PUBADDR
+  [ $PUBADDR ] || PUBADDR=$( curl -L -k http://icanhazip.com || exit 1 )
+  [ $PUBADDR ] || PUBADDR=$( curl -L -k http://ident.me || exit 1 )
+  [ $PUBADDR ] || PUBADDR=$( curl -L -k http://eth0.me || exit 1 )
+  if [ -z "$PUBADDR" ]
   then
     echo "I did not get the public ip :("
     exit 1
@@ -26,12 +28,14 @@ mkdir -p /etc/tinc/$NETNAME/hosts
 
 # create site config
 cp -f $TMPLDIR/templates/hosts/site.tmpl $CONFDIR/$NETNAME/hosts/$SITENAME
-sed -i s@--PUBIP--@$PUBIP@g $CONFDIR/$NETNAME/hosts/$SITENAME
+sed -i s@--PUBADDR--@$PUBADDR@g $CONFDIR/$NETNAME/hosts/$SITENAME
+sed -i s@--PORT--@$PORT@g $CONFDIR/$NETNAME/hosts/$SITENAME
 sed -i s@--SUBNET--@$SUBNET@g $CONFDIR/$NETNAME/hosts/$SITENAME
 
 # create tinc.conf
 cp -f $TMPLDIR/templates/tinc.conf.tmpl $CONFDIR/$NETNAME/tinc.conf
 sed -i s@--SITENAME--@$SITENAME@g $CONFDIR/$NETNAME/tinc.conf
+sed -i s@--PORT--@$PORT@g $CONFDIR/$NETNAME/tinc.conf
 for sitef in /etc/tinc/$NETNAME/hosts/*
 do
   if [ ! "$( basename $sitef )" == "$SITENAME" ]
