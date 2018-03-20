@@ -7,6 +7,8 @@ NETNAME="site2site"
 
 echo "STARTED: "$( date )
 
+[ -z $PORT ] && PORT=655
+
 # site conf - pub ip
 if [ -z "$PUBIP" ]
 then
@@ -26,7 +28,9 @@ mkdir -p /etc/tinc/$NETNAME/hosts
 
 # create site config
 cp -f $TMPLDIR/templates/hosts/site.tmpl $CONFDIR/$NETNAME/hosts/$SITENAME
+sed -i s@--PORT--@$PORT@g $CONFDIR/$NETNAME/tinc.conf
 sed -i s@--PUBIP--@$PUBIP@g $CONFDIR/$NETNAME/hosts/$SITENAME
+sed -i s@--PORT--@$PORT@g $CONFDIR/$NETNAME/hosts/$SITENAME
 sed -i s@--SUBNET--@$SUBNET@g $CONFDIR/$NETNAME/hosts/$SITENAME
 
 # create tinc.conf

@@ -107,10 +107,11 @@ You can check the syncronized and rewritten site config on your docker host's fo
 DO NOT FORGET: Sync the config of the hosts/sites from the docker host's `/srv/tinc/config` folder.
 
 
-## Good to know
+## Extra parameters 
 
   - `EXTRA_PARAMS` - You can use this parameter if you would like to run tinc in debug mode (example: `-d 3` ) or something similar.
   Check the man page of tinc, and use that parameter.
+  - `PORT` - tinc uses 655 tcp and udp port by default. You can change this with this paramter. If you use tinc behind a firewall, do not forget to forward this port to the tinc server. (Tinc use udp by default, but it is not availble automatically changes to tcp mode)
 
 ## Extra stuff
 
