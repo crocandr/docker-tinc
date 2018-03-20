@@ -5,6 +5,7 @@ services:
     image: croc/tinc
     environment:
       SITENAME: "siteA"
+      PORT: "655"
       LANIP: "192.168.0.253/24"
       SUBNET: "192.168.0.0/19"
     volumes:
@@ -12,9 +13,6 @@ services:
       - '/etc/localtime:/etc/localtime:ro'
     privileged: true
     network_mode: "host"
-    stdin_open: true
-    tty: true
-    command: /opt/start.sh
     restart: always
   sync:
     image: syncthing/syncthing
