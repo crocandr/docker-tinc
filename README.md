@@ -26,6 +26,7 @@ The auto-config procedure:
   - synchronize the hosts file to all other sites (recommended way with `syncthing/syncthing` or `resilio/sync` container)
   - restart the tinc container on all site
 
+I recommend to use docker-compose method on all sites, but here is a short example for docker run:
 
 First start the *1st* container (site1):
 
@@ -82,16 +83,8 @@ docker-compose up -d
 
 ... and ...
   - configure the sync (resilio or syncthing or other)
-  - wait for the config sync
+  - wait for the first config sync while other site configs arrive to the all hosts (1-5-10 mins)
   - restart the tinc or the full stack with `docker-compose restart`
-
-## Config
-
-The `/opt/start.sh` script configure the tinc node on every start.
-
-  - finds the public IP
-  - configures the tinc and connect every node to every other nodes (full MESH, connect everybody to everybody )
-
 
 ## Usage
 
@@ -104,7 +97,8 @@ If you've added a new site, you have to restart (stop, wait some seconds, start)
 
 You can check the syncronized and rewritten site config on your docker host's folder, example in the `/srv/tinc/config` folder.
 
-DO NOT FORGET: Sync the config of the hosts/sites from the docker host's `/srv/tinc/config` folder.
+
+DO NOT FORGET: Sync the config of the hosts/sites from the docker host'si! (example: `/srv/tinc/config` folder)
 
 
 ## Extra parameters 
@@ -122,42 +116,6 @@ This is a basic container that will be upload and download the Tinc's config to 
 
 Copy the `docker-compose_gitsyncer.yml` compose file to docker-compose.yml and chage the parameters (for tinc and for the git repo too!)
 
-Example:
-```
-version: '3'
-
-services:
-  tinc:
-    image: croc/tinc
-    environment:
-      SITENAME: "siteA"
-      LANIP: "192.168.0.253/24"
-      SUBNET: "192.168.0.0/19"
-    volumes:
-      - './tinc/config:/etc/tinc/site2site/hosts'
-      - '/etc/localtime:/etc/localtime:ro'
-    privileged: true
-    network_mode: "host"
-    stdin_open: true
-    tty: true
-    command: /opt/start.sh
-    restart: always
-  sync:
-    image: croc/git-syncer 
-    depends_on:
-      - tinc
-    environment:
-      URL: "https://bitbucket.org/MYUSER/tinc-repo.git"
-      BRANCH: "master"
-      GIT_USER: "MYUSER"
-      GIT_PASSWORD: "MyPassword"
-    volumes:
-      - './sync/ssh:/root/.ssh'
-      - './tinc/config:/data'
-      - '/etc/localtime:/etc/localtime:ro'
-#    restart: always
-```
-
 When the tinc stack is started, the git-syncer container will be uploading the latest site config to the Git repository.
 Sorry, but this is not a daemon! You have to restart this container or the stack (`docker-compose restart`) when the site config was changed.
 This is restart is the biggest disadvantage, and I think is not to stable for a long time.
@@ -166,6 +124,6 @@ I strongly recommend, use another sync method to syncronize Tinc's config files.
 
 
 
+Check my Github page and Wiki site for more information and examples.
+
 Good Luck!
-
-
