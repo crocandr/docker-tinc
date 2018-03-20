@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM debian 
 
 RUN apt-get update && apt-get install -y tinc vim tar less ifupdown net-tools curl unzip
 
@@ -10,4 +10,4 @@ RUN chmod +x /opt/start.sh
 
 VOLUME /etc/tinc
 
-#ENTRYPOINT /opt/start.sh
+ENTRYPOINT /opt/start.sh
