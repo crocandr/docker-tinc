@@ -1,6 +1,6 @@
-FROM debian 
+FROM archlinux/base
 
-RUN apt-get update && apt-get install -y tinc vim tar less ifupdown net-tools curl unzip
+RUN pacman -Sy --noconfirm tinc vim tar less net-tools curl unzip
 
 # template files copy
 COPY config /etc/tinc-templates
