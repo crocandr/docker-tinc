@@ -9,7 +9,7 @@ services:
 #      - PUBADDR=mycompany-siteA.duckdns.org
       - LANIP=192.168.0.253/24
       - SUBNET=192.168.0.0/19
-#     you can disable key renew if you sync site config manually
+#     you can disable automatic key renew if you sync site config manually
       - ALWAYS_RENEW_KEYS=false
     volumes:
       - './tinc/config:/etc/tinc/site2site/hosts'
