@@ -1,6 +1,6 @@
-FROM archlinux/base
+FROM archlinux:base
 
-RUN pacman -Sy --noconfirm tinc vim tar less grep net-tools iproute2 curl unzip
+RUN pacman -Syu --noconfirm tinc vim tar less grep net-tools iproute2 curl unzip
 
 # template files copy
 COPY config /etc/tinc-templates
